@@ -1,6 +1,11 @@
 import { k } from "./kaboomCtx";
 
 async function gameSetup() {
+    if (!k) {
+        console.error("Kaboom context (k) is not defined or initialized.");
+        return;
+    }
+
     k.loadSprite("assets", "./kirby-like.png", {
         sliceX: 9,
         sliceY: 10,
@@ -14,23 +19,21 @@ async function gameSetup() {
             guyIdle: 18,
             guyWalk: { from: 18, to: 19, speed: 4, loop: true },
             bird: { from: 27, to: 28, speed: 4, loop: true},
-
         },
-    });
+    }).catch(err => console.error("Error loading sprite:", err));
 
-    k.loadSprite("level-1", "./level-1.png");
+    k.loadSprite("level-1", "./level-1.png").catch(err => console.error("Error loading level-1 sprite:", err));
 
     k.scene("level-1", () => {
-       k.setGravity(2100);
-       k.add([
-         k.rect(k.width(), k.height()),
-         k.color(k.Color.fromHex("#f7db7db")),
-         k.fixed(),
-       ]);
+        k.setGravity(2100);
+        k.add([
+            k.rect(k.width(), k.height()),
+            k.color(k.Color.fromHex("#f7db7db")),
+            k.fixed(),
+        ]);
     });
 
     k.go("level-1");
-
 }
 
 gameSetup();
